@@ -1,0 +1,22 @@
+{
+  "name": "onlinepageanalysis",
+  "version": "1.0.0",
+  "description": "online page analyze",
+  "main": "index.ts",
+  "scripts": {
+    "start": "tsc index.ts && node index.js"
+  },
+  "keywords": [
+    "node",
+    "tsc"
+  ],
+  "devDependencies": {
+    "@types/node": "^12.11.7",
+    "mysql": "^2.17.1",
+    "typescript": "^3.6.3",
+    "express": "^4.17.1",
+    "log4js": "^6.1.0"
+  },
+  "author": "xishengbo",
+  "license": "ISC"
+}
