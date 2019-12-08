@@ -10,9 +10,8 @@
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "pretty": true,
-        
-        "listFiles": true,  
-        "listEmittedFiles": true, 
+        "listFiles": true,
+        "listEmittedFiles": true,
         "lib": [
             "es2016"
         ],

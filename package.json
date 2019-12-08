@@ -4,7 +4,8 @@
   "description": "online page analyze",
   "main": "index.ts",
   "scripts": {
-    "start": "tsc index.ts && node index.js"
+    "dev": "tsc -w index.ts --outDir build && node build/index.js",
+    "prod": "node build/index.js"
   },
   "keywords": [
     "node",
@@ -15,7 +16,9 @@
     "mysql": "^2.17.1",
     "typescript": "^3.6.3",
     "express": "^4.17.1",
-    "log4js": "^6.1.0"
+    "log4js": "^6.1.0",
+    "lodash": "^4.17.4",
+    "moment": "^2.20.1"
   },
   "author": "xishengbo",
   "license": "ISC"

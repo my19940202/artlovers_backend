@@ -7,12 +7,10 @@
 /yarn.lock
 /package-lock.json
 
-# production
-/dist
-
+/*.js
+/*.log
 # misc
 .DS_Store
-
 # umi
 .umi
 .umi-production

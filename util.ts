@@ -1,6 +1,6 @@
 import * as mysql from 'mysql';
 const pool = mysql.createPool({
-    host     : '1.1.1.1',
+    host     : '106.13.166.35',
     user     : 'root',
     password : 'kky@595876',
     database : 'xsb_test_db'

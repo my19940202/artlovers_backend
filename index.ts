@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as log4js from 'log4js';
+import * as path from 'path';
 import dishesApi from './dishes';
 
 log4js.configure({
@@ -16,10 +17,12 @@ const config = {
 // https://juejin.im/post/59bce4c45188257e8b36a0f3#heading-6
 const logger = log4js.getLogger('dishes');
 app.get('/', function(req, res){
-    logger.info(`req /////`);
-    res.send('hello world');
+    res.sendFile(path.join(__dirname + '/../html/index.html'))
 });
-app.use('/dishes', dishesApi);
+app.get('/static/test', function(req, res){
+    res.sendFile(path.join(__dirname + '/../html/index.html'))
+});
+app.use('/api/tools', dishesApi);
 
 app.listen(config.port, () => {
     // console.log(`server is listening on port ${port}!`
