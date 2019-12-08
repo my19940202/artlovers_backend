@@ -5,6 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "dev": "tsc -w index.ts --outDir build",
+    "build": "tsc index.ts --outDir build",
     "prod": "node build/index.js"
   },
   "keywords": [

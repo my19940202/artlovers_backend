@@ -115,7 +115,22 @@ dishesApi.post('/dishes/add', bodyParser.json(), function (req, res) { return __
                 return [4 /*yield*/, util_1.query(sql)];
             case 1:
                 _b = _c.sent(), rows = _b.rows, err = _b.err;
-                logger.info("req dishes/list");
+                logger.info("req dishes/add");
+                res.json(formartResJson(rows, err));
+                return [2 /*return*/];
+        }
+    });
+}); });
+dishesApi.post('/dishes/edit', bodyParser.json(), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, id, name, desc, ingredients, _b, rows, err;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                _a = req.body, id = _a.id, name = _a.name, desc = _a.desc, ingredients = _a.ingredients;
+                return [4 /*yield*/, util_1.query(("\n        UPDATE dishes SET\n        `name` = '" + name + "',\n        `desc` = '" + desc + "',\n        `ingredients` = '" + ingredients + "'\n        WHERE `id` = " + id + "\n    ").trim())];
+            case 1:
+                _b = _c.sent(), rows = _b.rows, err = _b.err;
+                logger.info("req dishes/edit");
                 res.json(formartResJson(rows, err));
                 return [2 /*return*/];
         }

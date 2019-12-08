@@ -45,7 +45,6 @@ dishesApi.get('/dishes/list', async (req, res)  => {
         select id, name, \`desc\`, ingredients, DATE_FORMAT(createtime, "%Y-%m-%d %T") as createtime
         from dishes
     `.trim());
-
     logger.info(`req dishes/list`);
     res.json(formartResJson(rows, err))
 });
@@ -70,7 +69,21 @@ dishesApi.post('/dishes/add', bodyParser.json(), async (req, res) => {
         VALUES ('${name}', '${desc}', ${ingredients}, '${createtime}')
     `.trim();
     const {rows, err}: any = await query(sql);
-    logger.info(`req dishes/list`);
+    logger.info(`req dishes/add`);
+    res.json(formartResJson(rows, err))
+});
+
+dishesApi.post('/dishes/edit', bodyParser.json(), async (req, res) => {
+    // TODO 后面再去加photo字段
+    const {id, name, desc,ingredients} = req.body;
+    const {rows, err}: any = await query(`
+        UPDATE dishes SET
+        \`name\` = '${name}',
+        \`desc\` = '${desc}',
+        \`ingredients\` = '${ingredients}'
+        WHERE \`id\` = ${id}
+    `.trim());
+    logger.info(`req dishes/edit`);
     res.json(formartResJson(rows, err))
 });
 
