@@ -13,10 +13,10 @@ export const query = (sql: string) => {
                 reject(err)
             } else {
                 connection.query(sql, ( err, rows) => {
-                    if ( err ) {
-                        reject( err )
+                    if (err) {
+                        reject({err})
                     } else {
-                        resolve( rows )
+                        resolve({rows})
                     }
                     connection.release()
                 })

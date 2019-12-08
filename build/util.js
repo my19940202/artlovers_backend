@@ -16,10 +16,10 @@ exports.query = function (sql) {
             else {
                 connection.query(sql, function (err, rows) {
                     if (err) {
-                        reject(err);
+                        reject({ err: err });
                     }
                     else {
-                        resolve(rows);
+                        resolve({ rows: rows });
                     }
                     connection.release();
                 });

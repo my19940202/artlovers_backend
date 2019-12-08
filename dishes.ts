@@ -23,11 +23,11 @@ dishesApi.use((req, res, next) => {
         next();
     }
 });
-function formartResJson(json) {
+function formartResJson(json, err) {
     let ret = {
         data: [],
         errno: 1,
-        msg: 'no data'
+        msg: err || 'no data'
     };
     if (!isEmpty(json)) {
         ret = {
@@ -41,20 +41,23 @@ function formartResJson(json) {
 
 dishesApi.get('/dishes/list', async (req, res)  => {
     // mysql format格式: %T https://www.w3school.com.cn/sql/func_date_format.asp
-    const rows: any = await query(`
-        select id, name, ingredients, DATE_FORMAT(createtime, "%Y-%m-%d %T") as createtime from dishes
+    const {rows, err}: any = await query(`
+        select id, name, \`desc\`, ingredients, DATE_FORMAT(createtime, "%Y-%m-%d %T") as createtime
+        from dishes
     `.trim());
+
     logger.info(`req dishes/list`);
-    res.json(formartResJson(rows))
+    res.json(formartResJson(rows, err))
 });
 
-// dishesApi.delete('/dishes/list', async (req, res)  => {
-//     const rows: any = await query(`
-//         select id, name, ingredients, DATE_FORMAT(createtime, "%Y-%m-%d %T") as createtime from dishes
-//     `.trim());
-//     logger.info(`req dishes/list`);
-//     res.json(formartResJson(rows))
-// });
+dishesApi.delete('/dishes/remove', async (req, res)  => {
+    const {id} = req.query;
+    const {rows, err}: any = await query(`
+        DELETE FROM dishes WHERE id = ${id}
+    `.trim());
+    logger.info(`req dishes/remove`);
+    res.json(formartResJson(rows, err))
+});
 
 // bodyParser.json() // for parsing application/json
 // bodyParser.urlencoded({ extended: true } // for parsing application/x-www-form-urlencoded
@@ -66,16 +69,15 @@ dishesApi.post('/dishes/add', bodyParser.json(), async (req, res) => {
         INSERT INTO dishes (\`name\`, \`desc\`, \`ingredients\`, \`createtime\`)
         VALUES ('${name}', '${desc}', ${ingredients}, '${createtime}')
     `.trim();
-    const rows: any = await query(sql);
+    const {rows, err}: any = await query(sql);
     logger.info(`req dishes/list`);
-    res.json(formartResJson(rows))
+    res.json(formartResJson(rows, err))
 });
 
-
 dishesApi.get('/ingredients/list', async (req, res)  => {
-    const rows: any = await query('select * from ingredient');
+    const {rows, err}: any = await query('select * from ingredient');
     logger.info(`req ingredients/list`);
-    res.json(formartResJson(rows))
+    res.json(formartResJson(rows, err))
 });
 
 dishesApi.post('/ingredients/add', bodyParser.json(), async (req, res)  => {
@@ -84,14 +86,9 @@ dishesApi.post('/ingredients/add', bodyParser.json(), async (req, res)  => {
         INSERT INTO ingredient (\`name\`, \`desc\`, \`startMonth\`, \`endMonth\`)
         VALUES ('${name}', '${desc}', ${startMonth}, ${endMonth})
     `.trim();
-    const rows: any = await query(sql);
-    console.log(rows, 'rows');
+    const {rows, err}: any = await query(sql);
     logger.info(`post /ingredients/add`);
-    res.json(formartResJson({}))
-});
-
-dishesApi.get('/delete', (req, res)  => {
-    res.json('fuck you delte')
+    res.json(formartResJson(rows, err))
 });
 
 export default dishesApi;
