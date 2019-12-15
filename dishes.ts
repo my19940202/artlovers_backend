@@ -1,18 +1,9 @@
 import * as express from 'express';
-import * as log4js from 'log4js';
-import {query} from './util';
+import {query, mlog} from './util';
 import {isEmpty} from 'lodash';
 import * as moment from 'moment';
-
 import * as bodyParser from 'body-parser';
-const app = express();
 
-log4js.configure({
-    appenders: { dishes: { type: 'file', filename: 'dishes.log' } },
-    categories: { default: { appenders: ['dishes'], level: 'debug' } }
-});
-
-const logger = log4js.getLogger('dishes');
 const dishesApi = express.Router();
 dishesApi.use((req, res, next) => {
     // const userIsAllowed = true || ALLOWED_IPS.indexOf(req.ip) !== -1;
@@ -45,7 +36,7 @@ dishesApi.get('/dishes/list', async (req, res)  => {
         select id, name, \`desc\`, ingredients, DATE_FORMAT(createtime, "%Y-%m-%d %T") as createtime
         from dishes
     `.trim());
-    logger.info(`req dishes/list`);
+    mlog(`req dishes/list`);
     res.json(formartResJson(rows, err))
 });
 
@@ -54,7 +45,7 @@ dishesApi.delete('/dishes/remove', async (req, res)  => {
     const {rows, err}: any = await query(`
         DELETE FROM dishes WHERE id = ${id}
     `.trim());
-    logger.info(`req dishes/remove`);
+    mlog(`req dishes/remove`);
     res.json(formartResJson(rows, err))
 });
 
@@ -66,10 +57,10 @@ dishesApi.post('/dishes/add', bodyParser.json(), async (req, res) => {
     const createtime = moment().format("YYYY-MM-DD HH:mm:ss");
     let sql = `
         INSERT INTO dishes (\`name\`, \`desc\`, \`ingredients\`, \`createtime\`)
-        VALUES ('${name}', '${desc}', ${ingredients}, '${createtime}')
+        VALUES ('${name}', '${desc}', '${ingredients}', '${createtime}')
     `.trim();
     const {rows, err}: any = await query(sql);
-    logger.info(`req dishes/add`);
+    mlog(`req dishes/add`);
     res.json(formartResJson(rows, err))
 });
 
@@ -83,13 +74,13 @@ dishesApi.post('/dishes/edit', bodyParser.json(), async (req, res) => {
         \`ingredients\` = '${ingredients}'
         WHERE \`id\` = ${id}
     `.trim());
-    logger.info(`req dishes/edit`);
+    mlog(`req dishes/edit`);
     res.json(formartResJson(rows, err))
 });
 
 dishesApi.get('/ingredients/list', async (req, res)  => {
     const {rows, err}: any = await query('select * from ingredient');
-    logger.info(`req ingredients/list`);
+    mlog(`req ingredients/list`);
     res.json(formartResJson(rows, err))
 });
 
@@ -100,7 +91,7 @@ dishesApi.post('/ingredients/add', bodyParser.json(), async (req, res)  => {
         VALUES ('${name}', '${desc}', ${startMonth}, ${endMonth})
     `.trim();
     const {rows, err}: any = await query(sql);
-    logger.info(`post /ingredients/add`);
+    mlog(`post /ingredients/add`);
     res.json(formartResJson(rows, err))
 });
 

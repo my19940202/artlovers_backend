@@ -37,17 +37,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var express = require("express");
-var log4js = require("log4js");
 var util_1 = require("./util");
 var lodash_1 = require("lodash");
 var moment = require("moment");
 var bodyParser = require("body-parser");
-var app = express();
-log4js.configure({
-    appenders: { dishes: { type: 'file', filename: 'dishes.log' } },
-    categories: { "default": { appenders: ['dishes'], level: 'debug' } }
-});
-var logger = log4js.getLogger('dishes');
 var dishesApi = express.Router();
 dishesApi.use(function (req, res, next) {
     // const userIsAllowed = true || ALLOWED_IPS.indexOf(req.ip) !== -1;
@@ -81,7 +74,7 @@ dishesApi.get('/dishes/list', function (req, res) { return __awaiter(void 0, voi
             case 0: return [4 /*yield*/, util_1.query("\n        select id, name, `desc`, ingredients, DATE_FORMAT(createtime, \"%Y-%m-%d %T\") as createtime\n        from dishes\n    ".trim())];
             case 1:
                 _a = _b.sent(), rows = _a.rows, err = _a.err;
-                logger.info("req dishes/list");
+                util_1.mlog("req dishes/list");
                 res.json(formartResJson(rows, err));
                 return [2 /*return*/];
         }
@@ -96,7 +89,7 @@ dishesApi["delete"]('/dishes/remove', function (req, res) { return __awaiter(voi
                 return [4 /*yield*/, util_1.query(("\n        DELETE FROM dishes WHERE id = " + id + "\n    ").trim())];
             case 1:
                 _a = _b.sent(), rows = _a.rows, err = _a.err;
-                logger.info("req dishes/remove");
+                util_1.mlog("req dishes/remove");
                 res.json(formartResJson(rows, err));
                 return [2 /*return*/];
         }
@@ -111,11 +104,11 @@ dishesApi.post('/dishes/add', bodyParser.json(), function (req, res) { return __
             case 0:
                 _a = req.body, name = _a.name, desc = _a.desc, ingredients = _a.ingredients;
                 createtime = moment().format("YYYY-MM-DD HH:mm:ss");
-                sql = ("\n        INSERT INTO dishes (`name`, `desc`, `ingredients`, `createtime`)\n        VALUES ('" + name + "', '" + desc + "', " + ingredients + ", '" + createtime + "')\n    ").trim();
+                sql = ("\n        INSERT INTO dishes (`name`, `desc`, `ingredients`, `createtime`)\n        VALUES ('" + name + "', '" + desc + "', '" + ingredients + "', '" + createtime + "')\n    ").trim();
                 return [4 /*yield*/, util_1.query(sql)];
             case 1:
                 _b = _c.sent(), rows = _b.rows, err = _b.err;
-                logger.info("req dishes/add");
+                util_1.mlog("req dishes/add");
                 res.json(formartResJson(rows, err));
                 return [2 /*return*/];
         }
@@ -130,7 +123,7 @@ dishesApi.post('/dishes/edit', bodyParser.json(), function (req, res) { return _
                 return [4 /*yield*/, util_1.query(("\n        UPDATE dishes SET\n        `name` = '" + name + "',\n        `desc` = '" + desc + "',\n        `ingredients` = '" + ingredients + "'\n        WHERE `id` = " + id + "\n    ").trim())];
             case 1:
                 _b = _c.sent(), rows = _b.rows, err = _b.err;
-                logger.info("req dishes/edit");
+                util_1.mlog("req dishes/edit");
                 res.json(formartResJson(rows, err));
                 return [2 /*return*/];
         }
@@ -143,7 +136,7 @@ dishesApi.get('/ingredients/list', function (req, res) { return __awaiter(void 0
             case 0: return [4 /*yield*/, util_1.query('select * from ingredient')];
             case 1:
                 _a = _b.sent(), rows = _a.rows, err = _a.err;
-                logger.info("req ingredients/list");
+                util_1.mlog("req ingredients/list");
                 res.json(formartResJson(rows, err));
                 return [2 /*return*/];
         }
@@ -159,7 +152,7 @@ dishesApi.post('/ingredients/add', bodyParser.json(), function (req, res) { retu
                 return [4 /*yield*/, util_1.query(sql)];
             case 1:
                 _b = _c.sent(), rows = _b.rows, err = _b.err;
-                logger.info("post /ingredients/add");
+                util_1.mlog("post /ingredients/add");
                 res.json(formartResJson(rows, err));
                 return [2 /*return*/];
         }
